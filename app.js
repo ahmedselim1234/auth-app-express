@@ -16,15 +16,17 @@ app.set("view engine", "ejs");
 
 
 // database connection
-const dbURI = "mongodb+srv://ahmed:ahmed-1@cluster0.jo6xr9w.mongodb.net/new";
+const dbURI = "mongodb+srv://ahmed:ahmed-1@cluster0.jo6xr9w.mongodb.net/ninga";
 mongoose
   .connect(dbURI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true,
   })
-  .then((result) => app.listen(3000))
-  .catch((err) => console.log(err));
+  .then((result) =>{app.listen(3000);
+    console.log('connected to db!')
+  } )
+  .catch((err) => console.log("not connected to db!"));
 
 // routes
 app.get("/", (req, res) => res.render("home"));
