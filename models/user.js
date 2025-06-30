@@ -1,5 +1,7 @@
 const { isEmail } = require("validator");
 
+const bcrypt = require("bcrypt");
+
 const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema({
@@ -18,13 +20,16 @@ const userSchema = new mongoose.Schema({
   },
 });
 
-userSchema.post("save", function (doc, next) {
-  console.log("new user saved", doc);
-  next();
-});
-userSchema.pre("save", function ( next) {
-    //this.
-  console.log("befor saving",this);
+// userSchema.post("save", function (doc, next) {
+//   console.log("new user saved", doc);
+//   next();
+// });
+
+
+// hashed password
+userSchema.pre("save", async function (next) {
+  const salt = await bcrypt.genSalt();
+  this.password = await bcrypt.hash(this.password,salt);
   next();
 });
 
