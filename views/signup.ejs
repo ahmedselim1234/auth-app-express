@@ -1,5 +1,4 @@
 <%- include('partials/header'); -%>
-
 <form action="">
   <h2>Sign up</h2>
   <label for="email">Email</label>
@@ -13,17 +12,37 @@
 </form>
 <script>
   const form = document.querySelector("form");
+  const emailError = document.querySelector(".email.error");
+  const passwordError = document.querySelector(".password.error");
 
-  form.addEventListener("submit", (e) => {
+  form.addEventListener("submit", async (e) => {
     e.preventDefault();
-    try{
-         const email = form.email.value;
+    //reset errors
+    emailError.textContent = "";
+    passwordError.textContent = "";
+
+    // get the value
+    const email = form.email.value;
     const password = form.password.value;
-    console.log(email, password);
-    }catch(err){
-        console.log(err)
+
+    try {
+      const res = await fetch("/signup", {
+        method: "POST",
+        body: JSON.stringify({ email: email, password: password }),
+        headers: { "Content-Type": "application/json" },
+      });
+      const data = await res.json();
+      console.log(data);
+      if (data.errors) {
+        emailError.textContent = data.errors.email;
+        passwordError.textContent = data.errors.email;
+      }
+      if (data.user) {
+        location.assign("/");
+      }
+    } catch (err) {
+      // console.log(err);
     }
-   
   });
 </script>
 
