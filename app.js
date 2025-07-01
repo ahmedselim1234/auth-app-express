@@ -3,7 +3,8 @@ const mongoose = require("mongoose");
 const authRoutes = require("./routes/auth");
 const cookieParser = require("cookie-parser");
 
-const requireAuth = require("./middleware/authmiddleware");
+const {requireAuth, checkUser} = require("./middleware/authmiddleware");
+
 
 const app = express();
 
@@ -29,6 +30,7 @@ mongoose
   .catch((err) => console.log("not connected to db!"));
 
 // routes
+app.get('*',checkUser)
 app.get("/", requireAuth,(req, res) => res.render("home"));
 app.get("/smoothies",requireAuth,(req, res) => res.render("smoothies"));
 app.use(authRoutes);
